@@ -5,9 +5,42 @@
     </head>
     <body>
 
-    <h1>This is a Heading</h1>
+    <h1>EDAMAM RECIPE SEARCH</h1>
+
     <p>This is a paragraph.</p>
-<!--    <img src= url alt="W3Schools.com">-->
+
+    <form method="POST">
+
+        <label for="ingredient">Enter the ingredient:</label><br>
+        <input type="text" id="ingredient" name="ingredient">
+        <br><br>
+
+        <label for="c_type">Cuisine type:</label><br>
+        <select id="c_type" name='c_type'>
+            <option selected>All</option>
+            {% for c in cuisine %}
+                <optgroup label={{c.group}}>
+                    {% set pnr = loop.index0 %}
+                    {% for t in c.type %}
+                        <option>{{t}}</option>
+                    {% endfor %}
+                </optgroup>
+            {% endfor %}
+        </select>
+        <br>
+
+        <button type="submit">Search</button>
+
+    </form>
+    <br>
+    <p>
+        {% for recipe in list_of_recipes %}
+            {{recipe.index}}. {{ recipe.label }}<br>
+            <a href="{{recipe.url}}">{{recipe.url}}</a> <br>
+            Kcal per serving: {{recipe.cal}}<br><br>
+        {% endfor %}
+    </p>
+<!--    <img src= url alt="recipe image">-->
 
     </body>
 </html>
