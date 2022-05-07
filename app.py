@@ -52,7 +52,6 @@ def search():
         add_filters += '&health={}'.format(d_type)
     add_filters = add_filters.replace(' ', '%20')
 
-
     search_url = 'https://api.edamam.com/api/recipes/v2?type=public' \
                  '&q={}&app_id={}&app_key={}{}'.format(ingredient, app_id, app_key,add_filters)
     response = requests.get(search_url)
@@ -73,8 +72,9 @@ def show_results():
         label = recipe['recipe']['label']
         url = recipe['recipe']['url']
         cal = recipe['recipe']['calories']
+        img = recipe['recipe']['image']
         i += 1
-        list_of_recipes.append({'index': i, 'label': label, 'url': url, 'cal': round(cal)})
+        list_of_recipes.append({'index': i, 'label': label, 'url': url, 'cal': round(cal), 'image': img})
 
     return list_of_recipes
 

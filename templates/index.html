@@ -54,13 +54,14 @@
 
     <br>
 
-    <p>
-        {% for recipe in list_of_recipes %}
-            {{recipe.index}}. {{ recipe.label }}<br>
-            <a href="{{recipe.url}}">{{recipe.url}}</a> <br>
-            Kcal per serving: {{recipe.cal}}<br><br>
-        {% endfor %}
-    </p>
+    {% for recipe in list_of_recipes %}
+        <p>
+            <img src={{recipe.image}} alt="recipe image">
+            {{ recipe.index }}. {{ recipe.label }}
+            <a href="{{recipe.url}}">{{ recipe.url }}</a>
+            Kcal per serving: {{ recipe.cal }}
+        </p>
+    {% endfor %}
 
     </body>
 </html>
