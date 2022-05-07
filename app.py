@@ -7,33 +7,59 @@ import requests
 app = Flask(__name__, template_folder='templates')
 
 # secret key
-app.config.update(dict(
-    SECRET_KEY='verysecretkey', ))
+app.secret_key = "abc"
+
+# filters data
+cuisine_type = [
+    {'group': 'Asian',
+     'type': ['Asian', 'Chinese', 'Indian', 'Japanese', 'Middle Eastern', 'South East Asian']},
+    {'group': 'American',
+     'type': ['American', 'Mexican', 'South American']},
+    {'group': 'European',
+     'type': ['British', 'Central European', 'Eastern European', 'French', 'Italian', 'Mediterranean', 'Nordic']},
+    {'group': 'Other',
+     'type': ['Kosher', 'Caribbean']}]
+
+meal_type = [
+    'Breakfast', 'Lunch', 'Dinner', 'Snack', 'Teatime']
+
+diet_type = [
+    'dairy-free', 'gluten-free', 'keto-friendly', 'low-sugar', 'paleo', 'peanut-free',
+    'pescatarian', 'vegan', 'vegetarian']
 
 
 def search():
-    # declare an ingredient
+    global recipes
+    global add_filters
+
+    # api connection data
     app_id = '30a1cf92'
     app_key = '001a381e6201c9fbf86f0b3035b6d2cc'
 
-    # variables from user's form
-    ingredient = request.form.get('ingredient')
-    c_type = request.form.get('c_type')
+    # take chosen filters from the form
+    ingredient = request.form.get('ingredient')  # main filter
+    c_type = request.form.get('c_type')  # additional filters
+    m_type = request.form.get('m_type')
+    d_type = request.form.get('d_type')
+
+    # concatenate the additional filters
+    add_filters = ''
+    if c_type != '':
+        add_filters = '&cuisineType={}'.format(c_type)
+    if m_type != '':
+        add_filters += '&mealType={}'.format(m_type)
+    if d_type != '':
+        add_filters += '&health={}'.format(d_type)
+    add_filters = add_filters.replace(' ', '%20')
+
+
     search_url = 'https://api.edamam.com/api/recipes/v2?type=public' \
-                 '&q={}&app_id={}&app_key={}'.format(ingredient, app_id, app_key)
+                 '&q={}&app_id={}&app_key={}{}'.format(ingredient, app_id, app_key,add_filters)
     response = requests.get(search_url)
     search_results = response.json()
-    global recipes
     recipes = search_results['hits']
+
     return recipes
-
-
-cuisine_type = [
-    {'group': 'Asian', type: ['Asian', 'Chinese', 'Indian', 'Japanese', 'Middle Eastern', 'South East Asian']},
-    {'group': 'American', type: ['American', 'Mexican', 'South American']},
-    {'group': 'European',
-     type: ['British', 'Central European', 'Eastern European', 'French', 'Italian', 'Mediterranean', 'Nordic']},
-    {'group': 'Other', type: ['Kosher', 'Caribbean']}]
 
 
 def show_results():
@@ -62,7 +88,9 @@ def index():
     return render_template(
         'index.html',
         cuisine=cuisine_type,
-        list_of_recipes=list_of_recipes)
+        list_of_recipes=list_of_recipes,
+        meal=meal_type,
+        diet=diet_type)
 
 
 if __name__ == '__main__':

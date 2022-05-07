@@ -7,7 +7,7 @@
 
     <h1>EDAMAM RECIPE SEARCH</h1>
 
-    <p>This is a paragraph.</p>
+    <p>To jest wyszukiwarka</p>
 
     <form method="POST">
 
@@ -17,14 +17,33 @@
 
         <label for="c_type">Cuisine type:</label><br>
         <select id="c_type" name='c_type'>
-            <option selected>All</option>
+            <option selected></option>
             {% for c in cuisine %}
                 <optgroup label={{c.group}}>
-                    {% set pnr = loop.index0 %}
                     {% for t in c.type %}
                         <option>{{t}}</option>
                     {% endfor %}
                 </optgroup>
+            {% endfor %}
+        </select>
+
+        <br>
+
+        <label for="m_type">Meal type:</label><br>
+        <select id="m_type" name='m_type'>
+            <option selected></option>
+            {% for m in meal %}
+                <option>{{m}}</option>
+            {% endfor %}
+        </select>
+
+        <br>
+
+        <label for="d_type">Diet type:</label><br>
+        <select id="d_type" name='d_type'>
+            <option selected></option>
+            {% for d in diet %}
+                <option>{{d}}</option>
             {% endfor %}
         </select>
         <br>
@@ -32,7 +51,9 @@
         <button type="submit">Search</button>
 
     </form>
+
     <br>
+
     <p>
         {% for recipe in list_of_recipes %}
             {{recipe.index}}. {{ recipe.label }}<br>
@@ -40,7 +61,6 @@
             Kcal per serving: {{recipe.cal}}<br><br>
         {% endfor %}
     </p>
-<!--    <img src= url alt="recipe image">-->
 
     </body>
 </html>
