@@ -62,35 +62,52 @@ def search():
 
 
 def show_results():
+
     search()
 
-    i = 0
     global list_of_recipes
     list_of_recipes = []
 
+    i = 0
     for recipe in recipes:
+
         label = recipe['recipe']['label']
         url = recipe['recipe']['url']
         cal = recipe['recipe']['calories']
         img = recipe['recipe']['image']
+        ingredients = recipe['recipe']['ingredients']
+
         i += 1
-        list_of_recipes.append({'index': i, 'label': label, 'url': url, 'cal': round(cal), 'image': img})
+        list_of_recipes.append({
+            'index': i,
+            'label': label,
+            'url': url,
+            'cal': round(cal),
+            'image': img,
+            'ingredients': ingredients})
 
     return list_of_recipes
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+
     if request.method == 'POST':
         show_results()
+        return render_template('index.html',
+                               list_of_recipes=list_of_recipes,
+                               cuisine=cuisine_type,
+                               diet=diet_type,
+                               meal=meal_type)
         # return redirect(url_for('index'))
-
-    return render_template(
-        'index.html',
-        cuisine=cuisine_type,
-        list_of_recipes=list_of_recipes,
-        meal=meal_type,
-        diet=diet_type)
+    else:
+        return render_template(
+            'index.html',
+            cuisine=cuisine_type,
+            diet=diet_type,
+            meal=meal_type,
+            #list_of_recipes=list_of_recipes
+        )
 
 
 if __name__ == '__main__':
