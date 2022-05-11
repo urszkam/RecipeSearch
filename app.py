@@ -4,7 +4,7 @@ from flask import render_template
 from flask import request, redirect, url_for, flash
 import requests
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__, template_folder='templates', static_url_path='/static')
 
 # secret key
 app.secret_key = "abc"
@@ -53,7 +53,7 @@ def search():
     add_filters = add_filters.replace(' ', '%20')
 
     search_url = 'https://api.edamam.com/api/recipes/v2?type=public' \
-                 '&q={}&app_id={}&app_key={}{}'.format(ingredient, app_id, app_key,add_filters)
+                 '&q={}&app_id={}&app_key={}{}'.format(ingredient, app_id, app_key, add_filters)
     response = requests.get(search_url)
     search_results = response.json()
     recipes = search_results['hits']
