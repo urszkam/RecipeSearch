@@ -19,6 +19,7 @@ img.logo {
 
 input[type="text"] {
     width: 350px;
+    cursor: text;
 }
 
 .flexbox-filters {
@@ -31,10 +32,12 @@ input[type="text"] {
  .dropdown-menu {
    margin-right: 3%;
    margin-left: 3%;
+   cursor: pointer;
  }
 
  .search-button {
     align-self: center;
+    cursor: pointer;
 }
 
 article{
@@ -53,6 +56,11 @@ article{
 .recipe_description {
     display: flex;
     flex-flow: column;
+}
+
+.recipe_label {
+    font-size: large;
+    cursor: pointer;
 }
 
 /*body {
