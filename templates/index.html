@@ -65,16 +65,19 @@
                 <div class="search-button"><button type="submit">Search</button></div>
         </div>
     </form>
-
     <br>
-    <div class="flexbox-results">
-        {% for recipe in list_of_recipes %}
-                <div><img src={{recipe.image}} alt="recipe image" class="recipe"></div>
-                <div><p>{{ recipe.index }}. {{ recipe.label }}</p></div>
-                <div><a href="{{recipe.url}}">{{ recipe.url }}</a></div>
-                <div><p>Kcal per serving: {{ recipe.cal }}</p></div>
-                <div><p>Ingredients: {% for ingredient in recipe.ingredients %} {{ingredient.food}}, {% endfor %}</p></div>
-        {% endfor %}
-    </div>
+        <article>
+            {% for recipe in list_of_recipes %}
+                <div class="flexbox-results">
+                        <div class="recipe_image"><img src={{recipe.image}} alt="recipe image" class="recipe"></div>
+                        <div class="recipe_description">
+                            <div><p>{{ recipe.index }}. {{ recipe.label }}</p></div>
+                            <div><a href="{{recipe.url}}">{{ recipe.url }}</a></div>
+                            <div><p>Kcal per serving: {{ recipe.cal }}</p></div>
+                            <div><p>Ingredients: {% for ingredient in recipe.ingredients %} {{ingredient.food}}, {% endfor %}</p></div>
+                        </div>
+                </div>
+                {% endfor %}
+        </article>
     </body>
 </html>

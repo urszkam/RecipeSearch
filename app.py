@@ -70,12 +70,19 @@ def show_results():
 
     i = 0
     for recipe in recipes:
+        rec = recipe['recipe']
 
-        label = recipe['recipe']['label']
-        url = recipe['recipe']['url']
-        cal = recipe['recipe']['calories']
-        img = recipe['recipe']['image']
-        ingredients = recipe['recipe']['ingredients']
+        label = rec['label']
+        url = rec['url']
+        cal = rec['calories']
+        img = rec['image']
+        ingredients = rec['ingredients']
+        servings = rec['yield']
+        nutrients = {"cal_per_serving": rec['calories'] / servings,
+                "fat": rec['totalNutrients']['FAT']['quantity'] / servings,
+                "carbohydrates": rec['totalNutrients']['CHOCDF']['quantity'] / servings,
+                "sugar": rec['totalNutrients']['SUGAR']['quantity'] / servings,
+                "protein": rec['totalNutrients']['PROCNT']['quantity'] / servings}
 
         i += 1
         list_of_recipes.append({
@@ -84,7 +91,8 @@ def show_results():
             'url': url,
             'cal': round(cal),
             'image': img,
-            'ingredients': ingredients})
+            'ingredients': ingredients,
+            'nutrients': nutrients})
 
     return list_of_recipes
 

@@ -13,7 +13,10 @@ img.logo {
   flex-flow: column wrap;
 }
 
-.ingredient {align-self: center;}
+.ingredient {
+    align-self: center;
+}
+
 input[type="text"] {
     width: 350px;
 }
@@ -23,17 +26,35 @@ input[type="text"] {
   display: flex;
   justify-content: center;
   flex-flow: row wrap;
-  }
+}
 
  .dropdown-menu {
-   margin-right: 4%;
+   margin-right: 3%;
+   margin-left: 3%;
  }
 
  .search-button {
     align-self: center;
-   }
+}
 
-/*body {
+article{
     margin-left: 20%;
     margin-right: 20%;
+    display: flex;
+    flex-flow: column wrap;
+}
+
+.flexbox-results {
+    margin-top: 1%;
+    display: flex;
+    flex-flow  : row;
+}
+
+.recipe_description {
+    display: flex;
+    flex-flow: column;
+}
+
+/*body {
+
 }*/
