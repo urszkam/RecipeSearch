@@ -1,79 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
+        <meta charset="UTF-8">
         <title>Page Title</title>
-        <link rel="style" href="style.css">
+        <link rel="stylesheet" type="text/css" href="../static/style.css">
     </head>
     <body>
 
-    <h1>EDAMAM RECIPE SEARCH</h1>
-
-    <p>To jest wyszukiwarka</p>
+    <img src="../static/images/logo.png" class="logo" alt="FoodIdea logo">
 
     <form method="POST">
+        <div class="flexbox-search">
+            <div class="ingredient">
+                <label for="ingredient">Enter one or more ingredients separated with a space:</label>
+                <br>
+                <input type="text" id="ingredient" name="ingredient">
+            </div>
 
-        <label for="ingredient">Enter the ingredient:</label><br>
-        <input type="text" id="ingredient" name="ingredient">
-        <br><br>
-
-        <div class="dropdown">
-            <label for="c_type">Cuisine type:</label><br>
-            <div class="dropdown_content">
-                <select id="c_type" name='c_type'>
-                    <option selected></option>
-                    {% for c in cuisine %}
-                        <optgroup label={{c.group}}>
-                            {% for t in c.type %}
-                                <option>{{t}}</option>
+            <br><br>
+        <div class="flexbox-filters">
+                <div class="dropdown-menu">
+                    <label for="c_type">Cuisine type:</label><br>
+                    <div class="dropdown-content">
+                        <select id="c_type" name='c_type'>
+                            <option selected></option>
+                            {% for c in cuisine %}
+                                <optgroup label={{c.group}}>
+                                    {% for t in c.type %}
+                                        <option>{{t}}</option>
+                                    {% endfor %}
+                                </optgroup>
                             {% endfor %}
-                        </optgroup>
-                    {% endfor %}
-                </select>
+                        </select>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="dropdown-menu">
+                    <label for="m_type">Meal type:</label><br>
+                    <div class="dropdown-content">
+                        <select id="m_type" name='m_type'>
+                            <option selected></option>
+                            {% for m in meal %}
+                                <option>{{m}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <br>
+
+                <div class="dropdown-menu">
+                    <label for="d_type">Diet type:</label><br>
+                    <div class="dropdown-content">
+                        <select id="d_type" name='d_type'>
+                            <option selected></option>
+                            {% for d in diet %}
+                                <option>{{d}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
             </div>
+                <div class="search-button"><button type="submit">Search</button></div>
         </div>
-        <br>
-
-        <div class="dropdown">
-            <label for="m_type">Meal type:</label><br>
-            <div class="dropdown_content">
-                <select id="m_type" name='m_type'>
-                    <option selected></option>
-                    {% for m in meal %}
-                        <option>{{m}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        <br>
-
-        <div class="dropdown">
-            <label for="d_type">Diet type:</label><br>
-            <div class="dropdown_content">
-                <select id="d_type" name='d_type'>
-                    <option selected></option>
-                    {% for d in diet %}
-                        <option>{{d}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        <br>
-
-        <button type="submit">Search</button>
-
     </form>
 
     <br>
-
-    {% for recipe in list_of_recipes %}
-        <p>
-            <img src={{recipe.image}} alt="recipe image">
-            {{ recipe.index }}. {{ recipe.label }}
-            <a href="{{recipe.url}}">{{ recipe.url }}</a>
-            Kcal per serving: {{ recipe.cal }}
-            Ingredients: {% for ingredient in recipe.ingredients %} {{ingredient.food}}, {% endfor %}
-        </p>
-    {% endfor %}
-
+    <div class="flexbox-results">
+        {% for recipe in list_of_recipes %}
+                <div><img src={{recipe.image}} alt="recipe image" class="recipe"></div>
+                <div><p>{{ recipe.index }}. {{ recipe.label }}</p></div>
+                <div><a href="{{recipe.url}}">{{ recipe.url }}</a></div>
+                <div><p>Kcal per serving: {{ recipe.cal }}</p></div>
+                <div><p>Ingredients: {% for ingredient in recipe.ingredients %} {{ingredient.food}}, {% endfor %}</p></div>
+        {% endfor %}
+    </div>
     </body>
 </html>
