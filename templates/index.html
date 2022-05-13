@@ -4,6 +4,9 @@
         <meta charset="UTF-8">
         <title>Page Title</title>
         <link rel="stylesheet" type="text/css" href="../static/style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@800&family=Roboto:wght@400;900&display=swap" rel="stylesheet">
     </head>
     <body>
 
@@ -69,12 +72,12 @@
         <article>
             {% for recipe in list_of_recipes %}
                 <div class="flexbox-results">
-                        <div class="recipe_image"><img src={{recipe.image}} alt="recipe image" class="recipe"></div>
-                        <div class="recipe_description">
-                            <div><p>{{ recipe.index }}. {{ recipe.label }}</p></div>
-                            <div><a href="{{recipe.url}}">{{ recipe.url }}</a></div>
-                            <div><p>Kcal per serving: {{ recipe.cal }}</p></div>
-                            <div><p>Ingredients: {% for ingredient in recipe.ingredients %} {{ingredient.food}}, {% endfor %}</p></div>
+                        <div class="recipe-image">
+                            <img src={{recipe.image}} alt="recipe image" class="recipe">
+                        </div>
+                        <div class="recipe-description">
+                            <div class="recipe-label"><a href="{{recipe.url}}">{{ recipe.label }}</a></div>
+                            <div class="ingr"><p>{% for ingredient in recipe.ingredients %} {{ingredient.food}}, {% endfor %}</p></div>
                         </div>
                 </div>
                 {% endfor %}

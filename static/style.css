@@ -11,6 +11,7 @@ img.logo {
   margin-top: 1%;
   display: flex;
   flex-flow: column wrap;
+  color: #14213D;
 }
 
 .ingredient {
@@ -19,7 +20,7 @@ img.logo {
 
 input[type="text"] {
     width: 350px;
-    cursor: text;
+/*    cursor: text;*/
 }
 
 .flexbox-filters {
@@ -27,6 +28,7 @@ input[type="text"] {
   display: flex;
   justify-content: center;
   flex-flow: row wrap;
+  color: #14213D;
 }
 
  .dropdown-menu {
@@ -48,21 +50,39 @@ article{
 }
 
 .flexbox-results {
-    margin-top: 1%;
+    margin-top: 4%;
     display: flex;
     flex-flow  : row;
 }
 
-.recipe_description {
-    display: flex;
-    flex-flow: column;
+.recipe-image {
+    margin-right: 3%;
+    zoom: 70%;
+    box-shadow: 10px 10px 5px #E5E5E5;
 }
 
-.recipe_label {
-    font-size: large;
+.recipe-description {
+    display: flex;
+    flex-flow: column;
+    color: #14213D;
+}
+
+.recipe-label::first-letter {color: #FCA311;}
+.recipe-label {
+    font-size: x-large;
+    font-family: 'Open Sans', sans-serif;
     cursor: pointer;
 }
 
-/*body {
+.ingr {
+    text-transform: lowercase;
+}
 
-}*/
+a {
+    color: #14213D;
+    text-decoration: none;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+}

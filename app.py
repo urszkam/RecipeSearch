@@ -87,7 +87,7 @@ def show_results():
         i += 1
         list_of_recipes.append({
             'index': i,
-            'label': label,
+            'label': label.capitalize(),
             'url': url,
             'cal': round(cal),
             'image': img,
