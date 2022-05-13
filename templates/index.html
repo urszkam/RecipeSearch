@@ -72,6 +72,7 @@
         <article>
             {% for recipe in list_of_recipes %}
                 <div class="flexbox-results">
+                    <div class="checkbox"><input type="checkbox" id="save_in_file" name="save_in_file"></div>
                         <div class="recipe-image">
                             <img src={{recipe.image}} alt="recipe image" class="recipe">
                         </div>
@@ -80,7 +81,7 @@
                             <div class="ingr"><p>{% for ingredient in recipe.ingredients %} {{ingredient.food}}, {% endfor %}</p></div>
                         </div>
                 </div>
-                {% endfor %}
+            {% endfor %}
         </article>
     </body>
 </html>
