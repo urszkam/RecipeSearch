@@ -101,7 +101,7 @@ button {
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
-  width: auto;
+  width: 8em;
   will-change: transform,opacity;
   z-index: 0;
 }
