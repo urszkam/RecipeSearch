@@ -1,5 +1,11 @@
 
-body {margin-top: 3%}
+body {
+    color: #14213D;
+    font-family: "Google Sans",Roboto,Arial,sans-serif;
+    font-size: 14px;
+    letter-spacing: .25px;
+    margin-top: 3%;
+}
 
 img.logo {
     display: block;
@@ -9,15 +15,14 @@ img.logo {
 
 img.recipe {
     border-radius: 10px;
-    zoom: 70%;
     box-shadow: 10px 10px 5px #E5E5E5;
+    zoom: 70%;
 }
 
 .flexbox-search {
-  margin-top: 1%;
   display: flex;
   flex-flow: column wrap;
-  color: #14213D;
+  margin-top: 1%;
 }
 
 .ingredient {
@@ -29,34 +34,45 @@ input[type="text"] {
 }
 
 .flexbox-filters {
+  color: #14213D;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
   margin-top: -0.5%;
   margin-bottom: -0.5%;
-  display: flex;
-  justify-content: center;
-  flex-flow: row wrap;
-  color: #14213D;
 }
 
  .dropdown-menu {
-   margin-right: 3%;
-   margin-left: 3%;
    cursor: pointer;
+   margin-left: 3%;
+   margin-right: 3%;
  }
 
 /* delete default button style */
-button, button:focus {
-   outline: none;
+select,
+input[type='text'],
+button,  button:focus {
    background: transparent;
    border: 1px solid transparent;
    cursor: pointer;
+   outline: none;
 }
 
 button:active {
-   outline: none;
    background: transparent;
    border: 1px solid transparent;
+   outline: none;
 }
 
+input[type='text'] {
+    cursor:text;
+}
+
+select {
+    color: inherit;
+    font-family: inherit;
+
+}
 /* new button style */
 button {
   align-items: center;
@@ -66,7 +82,7 @@ button {
   border-style: none;
   box-shadow: rgba(0, 0, 0, .2) 0 3px 5px -1px,rgba(0, 0, 0, .14) 0 6px 10px 0,rgba(0, 0, 0, .12) 0 1px 18px 0;
   box-sizing: border-box;
-  color: #14213D;
+  color: inherit;
   cursor: pointer;
   display: inline-flex;
   fill: currentcolor;
@@ -103,8 +119,8 @@ button:active {
 }
 
 button:focus {
-  outline: none;
   border: 2px solid #FCA311;
+  outline: none;
 }
 
 button:not(:disabled) {
@@ -129,45 +145,45 @@ button:disabled {
 
 
 article{
-    margin-left: 20%;
-    margin-right: 20%;
     display: flex;
     flex-flow: column wrap;
+    margin-left: 20%;
+    margin-right: 20%;
 }
 
 .flexbox-results {
-    margin-top: 4%;
     display: flex;
     flex-flow  : row;
+    margin-top: 4%;
 }
 
 /* customize checkbox */
 .checkbox {
-    margin-right: 1%;
     align-self: center;
+    margin-right: 1%;
 }
 
 input[type="checkbox"] {
   appearance: none;
   background-color: #E5E5E5;
-  width: 1.25em;
-  height: 1.25em;
   border: 0.025em solid #14213D;
   border-radius: 0.25em;
-  transform: translateY(-0.075em);
   display: grid;
+  height: 1.25em;
   place-content: center;
+  transform: translateY(-0.075em);
+  width: 1.25em;
 }
 
 input[type="checkbox"]::before {
+  box-shadow: inset 1em 1em #14213D;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
   content: "";
-  width: 0.8em;
   height: 0.8em;
+  width: 0.8em;
   transform: scale(0);
   transition: 120ms transform ease-in-out;
-  box-shadow: inset 1em 1em #14213D;
   transform-origin: bottom left;
-  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
 }
 
 input[type="checkbox"]:checked::before {
@@ -188,16 +204,16 @@ input[type="checkbox"]:focus {
 }
 
 .recipe-description {
+    color: #14213D;
     display: flex;
     flex-flow: column;
-    color: #14213D;
 }
 
 .recipe-label::first-letter {color: #FCA311;}
 .recipe-label {
+    cursor: pointer;
     font-size: x-large;
     font-family: 'Open Sans', sans-serif;
-    cursor: pointer;
 }
 
 .ingr {
