@@ -1,1 +1,16 @@
-# RecipeSearch
+# Less-waste Recipe Search Engine
+ <br /> <br />
+<b>**Project description:** </b>
+<br />
+Search engine allows to look for recipes containing multiple ingredients which are already inside the user's frindge. Additional filters (cuisine, dish, meal tyle) help with finding the best match for user's preferences.
+<br /> <br /> <br />
+<b>**Technologies:** </b> <br />
+Python (Flask), HTML5, CSS3 <br />
+EDAMAM Recipe API documentation: https://developer.edamam.com/edamam-recipe-api <br /> <br /> <br /> <br />
+
+
+![Main page image](static/images/main.png?raw=true "Main")
+
+
+
+![Main page image](static/images/results.png?raw=true "Main")
