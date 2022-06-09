@@ -1,7 +1,5 @@
 # import packages
-from flask import Flask
-from flask import render_template
-from flask import request, redirect, url_for, flash
+from flask import Flask, render_template, request
 import requests
 
 app = Flask(__name__, template_folder='templates', static_url_path='/static')
@@ -28,15 +26,25 @@ diet_type = [
     'pescatarian', 'vegan', 'vegetarian']
 
 
-def search():
+def search(ingredient, add_filters):
     global recipes
-    global add_filters
 
     # api connection data
     app_id = '30a1cf92'
     app_key = '001a381e6201c9fbf86f0b3035b6d2cc'
 
-    # take chosen filters from the form
+    search_url = 'https://api.edamam.com/api/recipes/v2?type=public' \
+                 '&q={}&app_id={}&app_key={}{}'.format(ingredient, app_id, app_key, add_filters)
+    response = requests.get(search_url)
+    search_results = response.json()
+    recipes = search_results['hits']
+
+    return search_results['hits']
+
+
+
+def show_results():
+    # take data from the form
     ingredient = request.form.get('ingredient')  # main filter
     c_type = request.form.get('c_type')  # additional filters
     m_type = request.form.get('m_type')
@@ -52,47 +60,58 @@ def search():
         add_filters += '&health={}'.format(d_type)
     add_filters = add_filters.replace(' ', '%20')
 
-    search_url = 'https://api.edamam.com/api/recipes/v2?type=public' \
-                 '&q={}&app_id={}&app_key={}{}'.format(ingredient, app_id, app_key, add_filters)
-    response = requests.get(search_url)
-    search_results = response.json()
-    recipes = search_results['hits']
+    # run search()
+    results = search(ingredient, add_filters)
 
-    return recipes
-
-
-def show_results():
-
-    search()
-
-    global list_of_recipes
     list_of_recipes = []
 
-    i = 0
-    for recipe in recipes:
-        rec = recipe['recipe']
+# collect data from every recipe in search results
+    for result in results:
+        recipe = result['recipe']
+        label = recipe['label']
+        url = recipe['url']
+        img = recipe['image']
+        servings = recipe['yield']
+        nutrients = {
+            "cal":
+                round(recipe['calories'] / servings),
+            "fat":
+                round(recipe['totalNutrients']['FAT']['quantity'] / servings, 1),
+            "carbohydrates":
+                round(recipe['totalNutrients']['CHOCDF']['quantity'] / servings,
+                      1),
+            "sugar":
+                round(recipe['totalNutrients']['SUGAR']['quantity'] / servings, 1),
+            "protein":
+                round(recipe['totalNutrients']['PROCNT']['quantity'] / servings, 1)
+        }
+        ingredients = []
 
-        label = rec['label']
-        url = rec['url']
-        cal = rec['calories']
-        img = rec['image']
-        ingredients = rec['ingredients']
-        servings = rec['yield']
-        nutrients = {"cal_per_serving": rec['calories'] / servings,
-                "fat": rec['totalNutrients']['FAT']['quantity'] / servings,
-                "carbohydrates": rec['totalNutrients']['CHOCDF']['quantity'] / servings,
-                "sugar": rec['totalNutrients']['SUGAR']['quantity'] / servings,
-                "protein": rec['totalNutrients']['PROCNT']['quantity'] / servings}
+        # create list of ingredients
+        i = 0  # int for counting no. of ingredients in a recipe
+        for ingr in recipe['ingredients']:
+            ingredients.append(ingr['food'].lower())
+            i += 1
 
-        i += 1
+        # join ingredients into one string - ingredients separated with commas
+        ingredients_str = ', '.join(ingredients)
+
+        # create one list of elements needed to be shown in search results
         list_of_recipes.append({
-            'index': i,
             'label': label.capitalize(),
             'url': url,
-            'cal': round(cal),
             'image': img,
+            'servings': servings,
             'ingredients': ingredients,
-            'nutrients': nutrients})
+            'ingredients_str': ingredients_str,
+            'no_of_ingredients': i,
+            'nutrients': nutrients
+        })
+
+    # sort recipes by no. of ingredients and by recipe label
+    list_of_recipes = sorted(list_of_recipes,
+                             key=lambda e:
+                             (e['no_of_ingredients'], e['label']))
 
     return list_of_recipes
 
@@ -101,12 +120,14 @@ def show_results():
 def index():
 
     if request.method == 'POST':
-        show_results()
-        return render_template('index.html',
-                               list_of_recipes=list_of_recipes,
-                               cuisine=cuisine_type,
-                               diet=diet_type,
-                               meal=meal_type)
+        recipe_show = show_results()
+        return render_template(
+            'index.html',
+            list_of_recipes=recipe_show,
+            cuisine=cuisine_type,
+            diet=diet_type,
+            meal=meal_type
+            )
     else:
         return render_template(
             'index.html',
