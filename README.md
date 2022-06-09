@@ -2,7 +2,7 @@
  <br /> <br />
 <b>**Project description:** </b>
 <br />
-Search engine allows to look for recipes containing multiple ingredients which are already inside the user's frindge. Additional filters (cuisine, dish, meal tyle) help with finding the best match for user's preferences.
+The search engine allows looking for recipes containing multiple ingredients which are already inside the user's fridge. Additional filters (cuisine, dish, meal type) help with finding the best match for the user's preferences.
 <br /> <br /> <br />
 <b>**Technologies:** </b> <br />
 Python (Flask), HTML5, CSS3 <br />
