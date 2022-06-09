@@ -107,14 +107,12 @@ def index():
                                cuisine=cuisine_type,
                                diet=diet_type,
                                meal=meal_type)
-        # return redirect(url_for('index'))
     else:
         return render_template(
             'index.html',
             cuisine=cuisine_type,
             diet=diet_type,
             meal=meal_type,
-            #list_of_recipes=list_of_recipes
         )
 
 
