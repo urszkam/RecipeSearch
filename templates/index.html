@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Page Title</title>
+        <title>FoodIdea</title>
         <link rel="stylesheet" type="text/css" href="../static/style.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -65,23 +65,64 @@
                     </div>
                 </div>
             </div>
-                <div class="search-button"><button type="submit">Search</button></div>
+                <div class="search-button"><button type="submit" name="search-button">Search</button></div>
         </div>
     </form>
     <br>
         <article>
+            <form method="POST">
             {% for recipe in list_of_recipes %}
                 <div class="flexbox-results">
-                    <div class="checkbox"><input type="checkbox" id="save_in_file" name="save_in_file"></div>
+                    <div class="checkbox"><input type="checkbox" id="save" name="save"></div>
                         <div class="recipe-image">
-                            <img src={{recipe.image}} alt="recipe image" class="recipe">
+                            <img loading="lazy" src={{recipe.image}} alt="recipe image" class="recipe">
                         </div>
                         <div class="recipe-description">
                             <div class="recipe-label"><a href="{{recipe.url}}">{{ recipe.label }}</a></div>
-                            <div class="ingr"><p>{% for ingredient in recipe.ingredients %} {{ingredient.food}}, {% endfor %}</p></div>
+                            <div class="recipe-info">
+                                <div class="ingr"><p>Ingredients: {{recipe.ingredients_str}}</p></div>
+                                <div class="div-table">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2">Nutrition Facts*</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="calories">
+                                                <td class="nutrient-label">Calories</td>
+                                                <td class="nutrient-amount">{{recipe.nutrients['cal']}} g</td>
+                                            </tr>
+                                            <tr class="basic-nutrient">
+                                                <td class="nutrient-label">Fat</td>
+                                                <td class="nutrient-amount">{{recipe.nutrients['fat']}} g</td>
+                                            </tr>
+                                            <tr class="basic-nutrient">
+                                                <td class="nutrient-label">Carbohydrates</td>
+                                                <td class="nutrient-amount">{{recipe.nutrients['carbohydrates']}} g</td>
+                                            <tr>
+                                                <td class="sugar">Sugar</td>
+                                                <td class="nutrient-amount">{{recipe.nutrients['sugar']}} g</td>
+                                            <tr class="basic-nutrient">
+                                                <td class="nutrient-label">Protein</td>
+                                                <td class="nutrient-amount">{{recipe.nutrients['protein']}} g</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="2">*amount per serving</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                 </div>
             {% endfor %}
+                <div class="container-save-button">
+                    <div class="save-button"><button type="submit" name="save-button">Save chosen recipes</button></div>
+                </div>
+            </form>
         </article>
     </body>
 </html>
