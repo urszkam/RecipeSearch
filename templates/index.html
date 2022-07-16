@@ -12,7 +12,8 @@
 
     <img src="../static/images/logo.png" class="logo" alt="FoodIdea logo">
 
-    <form method="POST">
+
+    <form method="POST" name="recipe-form">
         <div class="flexbox-search">
             <div class="ingredient">
                 <label for="ingredient">Enter one or more ingredients separated with a space:</label>
@@ -119,9 +120,12 @@
                         </div>
                 </div>
             {% endfor %}
+
+            {% if list_of_recipes %}
                 <div class="container-save-button">
                     <div class="save-button"><button type="submit" name="save-button">Save chosen recipes</button></div>
                 </div>
+            {% endif %}
             </form>
         </article>
     </body>
