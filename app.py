@@ -33,8 +33,7 @@ def search(ingredient, add_filters):
     app_id = '30a1cf92'
     app_key = '001a381e6201c9fbf86f0b3035b6d2cc'
 
-    search_url = 'https://api.edamam.com/api/recipes/v2?type=public' \
-                 '&q={}&app_id={}&app_key={}{}'.format(ingredient, app_id, app_key, add_filters)
+    search_url = f'https://api.edamam.com/api/recipes/v2?type=public&q={ingredient}&app_id={app_id}&app_key={app_key}{add_filters}'
     response = requests.get(search_url)
     search_results = response.json()
     recipes = search_results['hits']
@@ -53,11 +52,11 @@ def show_results():
     # concatenate the additional filters
     add_filters = ''
     if c_type != '':
-        add_filters = '&cuisineType={}'.format(c_type)
+        add_filters = f'&cuisineType={c_type}'
     if m_type != '':
-        add_filters += '&mealType={}'.format(m_type)
+        add_filters += f'&mealType={m_type}'
     if d_type != '':
-        add_filters += '&health={}'.format(d_type)
+        add_filters += f'&health={d_type}'
     add_filters = add_filters.replace(' ', '%20')
 
     # run search()
