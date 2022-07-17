@@ -1,7 +1,8 @@
-# import packages
 from flask import Flask, flash, redirect, render_template, request, send_file, url_for
 import requests
-from fpdf2 import FPDF
+# from fpdf import FPDF
+import json
+import ast
 
 app = Flask(__name__, template_folder='templates', static_url_path='/static')
 
@@ -13,7 +14,7 @@ cuisine_type = [
     {'group': 'Asian',
      'type': ['Asian', 'Chinese', 'Indian', 'Japanese', 'Middle Eastern', 'South East Asian']},
     {'group': 'American',
-     'type': ['American', 'Mexican', 'South American']}p,
+     'type': ['American', 'Mexican', 'South American']},
     {'group': 'European',
      'type': ['British', 'Central European', 'Eastern European', 'French', 'Italian', 'Mediterranean', 'Nordic']},
     {'group': 'Other',
@@ -71,6 +72,7 @@ def show_results():
         url = recipe['url']
         img = recipe['image']
         servings = recipe['yield']
+        shopping_list = recipe['ingredientLines']
         nutrients = {
             "cal":
                 round(recipe['calories'] / servings),
@@ -104,7 +106,8 @@ def show_results():
             'ingredients': ingredients,
             'ingredients_str': ingredients_str,
             'no_of_ingredients': j,
-            'nutrients': nutrients
+            'nutrients': nutrients,
+            'shopping_list': shopping_list
         })
 
     # sort recipes by no. of ingredients and by recipe label
@@ -120,12 +123,41 @@ def show_results():
     return list_of_recipes
 
 
+def saveRecipes(list_of_recipes):
+    text = ""
+    labels = ('label','url','shopping_list')
+    with open("recipes.txt","w+") as all_recipies:
+        for recipe in list_of_recipes:
+            recipe = {key:value for (key,value) in recipe.items() if key in labels}
+            string = json.dumps(recipe)
+            text += string + "\n"
+        all_recipies.write(text)
+
+
+def createShoppingList(*args):
+    m = open("shoppinglist.txt","w+")
+    with open("recipes.txt","r+") as source:
+        all_lines = source.readlines()
+        text = ""
+        indexes = args[0]
+        for index in indexes:
+            print(index)
+            chosen_recipe = all_lines[index]
+            dictionary = ast.literal_eval(chosen_recipe)
+            text += f"{dictionary['label']}\n{dictionary['url']}\n\nShopping List:\n"
+            for item in dictionary['shopping_list']:
+                text += f"\t{item}\n"
+            text += "\n\n"
+        m.write(text)
+    m.close()
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    # players = request.form.getlist('check')
     if request.method == 'POST':
         if 'search-button' in request.form:
             recipe_show = show_results()
+            saveRecipes(recipe_show)
             return render_template(
                 'index.html',
                 list_of_recipes=recipe_show,
@@ -134,19 +166,18 @@ def index():
                 meal=meal_type,
                 )
         elif 'save-button' in request.form:
-            # indexes = request.form.getlist('save')
+            indexes_str = request.form.getlist('save')
+            indexes_int = [int(x) for x in indexes_str]
+            createShoppingList(indexes_int)
             # pdf = FPDF()
             # pdf.add_page()
             # pdf.set_font("Arial", size = 12)
             # pdf.cell(200, 10, txt = recipe_show,
             #         ln = 1, align = 'C')
-            # pdf.output("GFG.pdf") 
-            return render_template('index.html')
-    #             for x in f:
-    # pdf.cell(200, 10, txt = x, ln = 1, align = 'C')
-
-            # path = 'samplefile.pdf'
-            # return send_file(path,download_name='shoppinglist.pdf', as_attachment=True)
+            # pdf.output("GFG.pdf")
+            # return render_template('index.html')
+            path = 'shoppinglist.txt'
+            return send_file(path,download_name='shoppinglist.txt', as_attachment=True)
     else:
         return render_template(
             'index.html',
