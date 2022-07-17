@@ -12,8 +12,7 @@
 
     <img src="../static/images/logo.png" class="logo" alt="FoodIdea logo">
 
-
-    <form method="POST" name="recipe-form">
+    <form method="POST">
         <div class="flexbox-search">
             <div class="ingredient">
                 <label for="ingredient">Enter one or more ingredients separated with a space:</label>
@@ -71,10 +70,10 @@
     </form>
     <br>
         <article>
-            <form method="POST">
+            <form method="POST">  
             {% for recipe in list_of_recipes %}
                 <div class="flexbox-results">
-                    <div class="checkbox"><input type="checkbox" id="save" name="save"></div>
+                    <div class="checkbox"><input type="checkbox" id="save" name="save" value="{{recipe.index}}"></div>
                         <div class="recipe-image">
                             <img loading="lazy" src={{recipe.image}} alt="recipe image" class="recipe">
                         </div>
