@@ -1,18 +1,19 @@
 # import packages
-from flask import Flask, render_template, request
+from flask import Flask, flash, redirect, render_template, request, send_file, url_for
 import requests
+from fpdf2 import FPDF
 
 app = Flask(__name__, template_folder='templates', static_url_path='/static')
 
 # secret key
-app.secret_key = "abc"
+app.secret_key = "abcdefgh"
 
 # filters data
 cuisine_type = [
     {'group': 'Asian',
      'type': ['Asian', 'Chinese', 'Indian', 'Japanese', 'Middle Eastern', 'South East Asian']},
     {'group': 'American',
-     'type': ['American', 'Mexican', 'South American']},
+     'type': ['American', 'Mexican', 'South American']}p,
     {'group': 'European',
      'type': ['British', 'Central European', 'Eastern European', 'French', 'Italian', 'Mediterranean', 'Nordic']},
     {'group': 'Other',
@@ -27,8 +28,6 @@ diet_type = [
 
 
 def search(ingredient, add_filters):
-    global recipes
-
     # api connection data
     app_id = '30a1cf92'
     app_key = '001a381e6201c9fbf86f0b3035b6d2cc'
@@ -36,9 +35,10 @@ def search(ingredient, add_filters):
     search_url = f'https://api.edamam.com/api/recipes/v2?type=public&q={ingredient}&app_id={app_id}&app_key={app_key}{add_filters}'
     response = requests.get(search_url)
     search_results = response.json()
+ 
     recipes = search_results['hits']
 
-    return search_results['hits']
+    return recipes
 
 
 
@@ -61,7 +61,7 @@ def show_results():
 
     # run search()
     results = search(ingredient, add_filters)
-
+    global list_of_recipes
     list_of_recipes = []
 
 # collect data from every recipe in search results
@@ -87,10 +87,10 @@ def show_results():
         ingredients = []
 
         # create list of ingredients
-        i = 0  # int for counting no. of ingredients in a recipe
+        j = 0  # int for counting no. of ingredients in a recipe
         for ingr in recipe['ingredients']:
             ingredients.append(ingr['food'].lower())
-            i += 1
+            j += 1
 
         # join ingredients into one string - ingredients separated with commas
         ingredients_str = ', '.join(ingredients)
@@ -103,7 +103,7 @@ def show_results():
             'servings': servings,
             'ingredients': ingredients,
             'ingredients_str': ingredients_str,
-            'no_of_ingredients': i,
+            'no_of_ingredients': j,
             'nutrients': nutrients
         })
 
@@ -112,21 +112,41 @@ def show_results():
                              key=lambda e:
                              (e['no_of_ingredients'], e['label']))
 
+    i = 0
+    for recipe in list_of_recipes:
+        recipe['index'] = i
+        i += 1
+
     return list_of_recipes
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-
+    # players = request.form.getlist('check')
     if request.method == 'POST':
-        recipe_show = show_results()
-        return render_template(
-            'index.html',
-            list_of_recipes=recipe_show,
-            cuisine=cuisine_type,
-            diet=diet_type,
-            meal=meal_type
-            )
+        if 'search-button' in request.form:
+            recipe_show = show_results()
+            return render_template(
+                'index.html',
+                list_of_recipes=recipe_show,
+                cuisine=cuisine_type,
+                diet=diet_type,
+                meal=meal_type,
+                )
+        elif 'save-button' in request.form:
+            # indexes = request.form.getlist('save')
+            # pdf = FPDF()
+            # pdf.add_page()
+            # pdf.set_font("Arial", size = 12)
+            # pdf.cell(200, 10, txt = recipe_show,
+            #         ln = 1, align = 'C')
+            # pdf.output("GFG.pdf") 
+            return render_template('index.html')
+    #             for x in f:
+    # pdf.cell(200, 10, txt = x, ln = 1, align = 'C')
+
+            # path = 'samplefile.pdf'
+            # return send_file(path,download_name='shoppinglist.pdf', as_attachment=True)
     else:
         return render_template(
             'index.html',
