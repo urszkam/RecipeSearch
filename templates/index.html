@@ -70,10 +70,10 @@
     </form>
     <br>
         <article>
-            <form method="POST">
+            <form method="POST">  
             {% for recipe in list_of_recipes %}
                 <div class="flexbox-results">
-                    <div class="checkbox"><input type="checkbox" id="save" name="save"></div>
+                    <div class="checkbox"><input type="checkbox" id="save" name="save" value="{{recipe.index}}"></div>
                         <div class="recipe-image">
                             <img loading="lazy" src={{recipe.image}} alt="recipe image" class="recipe">
                         </div>
@@ -119,9 +119,12 @@
                         </div>
                 </div>
             {% endfor %}
+
+            {% if list_of_recipes %}
                 <div class="container-save-button">
                     <div class="save-button"><button type="submit" name="save-button">Save chosen recipes</button></div>
                 </div>
+            {% endif %}
             </form>
         </article>
     </body>
