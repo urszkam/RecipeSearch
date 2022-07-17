@@ -103,28 +103,45 @@ def show_results():
 
     return list_of_recipes
 
+
+def saveRecipes(list_of_recipes):
+    text = ""
+    labels = ('label','url','shopping_list')
+    with open("shoppinglist.txt","w+") as all_recipies:
+        for recipe in list_of_recipes:
+            recipe = {key:value for (key,value) in recipe.items() if key in labels}
+            string = json.dumps(recipe)
+            text += string + "\n"
+        all_recipies.write(text)
+
+def createShoppingList(*args):
+    m = open("shoppinglist2.txt","w+")
+    with open("shoppinglist.txt","r+") as source:
+        all_lines = source.readlines()
+        text = ""
+        indexes = args[0]
+        for index in indexes:
+            print(index)
+            chosen_recipe = all_lines[index]
+            dictionary = ast.literal_eval(chosen_recipe)
+            text += f"{dictionary['label']}\n{dictionary['url']}\n\nShopping List:\n"
+            for item in dictionary['shopping_list']:
+                text += f"\t{item}\n"
+            text += "\n\n"
+        m.write(text)
+    m.close()
+
 global_var = []
 def index(name):
     # players = request.form.getlist('check')
     if 'search-button' == name:
         global_var = show_results()
-        text = ""
-        labels = ('label','url','shopping_list')
-        with open("shoppinglist.txt","w+") as l:
-            for recipe in global_var:
-                recipe = {key:value for (key,value) in recipe.items() if key in labels}
-                string = json.dumps(recipe)
-                text += string + "\n"
-            l.write(text)
+        saveRecipes(global_var)
         return global_var
     elif 'save-button' == name:
-        m = open("shoppinglist2.txt","w+")
-        with open("shoppinglist.txt","r") as l:
-            string = l.read()
-            dictionary = ast.literal_eval(string)
-            label = dictionary['label']
-            m.write(label)
-        m.close()
+        indexes_str = ["2","5","7","12"]
+        indexes_int = [int(x) for x in indexes_str]
+        createShoppingList(indexes_int)
         # indexes = request.form.getlist('save')
         # pdf = FPDF()
         # pdf.add_page()
