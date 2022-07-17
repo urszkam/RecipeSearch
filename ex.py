@@ -1,13 +1,7 @@
-from flask import Flask, flash, redirect, render_template, request, send_file, url_for
 import requests
-# from fpdf import FPDF
 import json
 import ast
-
-app = Flask(__name__, template_folder='templates', static_url_path='/static')
-
-# secret key
-app.secret_key = "abcdefgh"
+# from fpdf2 import FPDF
 
 # filters data
 cuisine_type = [
@@ -28,16 +22,17 @@ diet_type = [
     'pescatarian', 'vegan', 'vegetarian']
 
 
-def search(ingredient, add_filters):
+def search(ingredient):
     # api connection data
     app_id = '30a1cf92'
     app_key = '001a381e6201c9fbf86f0b3035b6d2cc'
 
-    search_url = f'https://api.edamam.com/api/recipes/v2?type=public&q={ingredient}&app_id={app_id}&app_key={app_key}{add_filters}'
+    search_url = f'https://api.edamam.com/api/recipes/v2?type=public&q={ingredient}&app_id={app_id}&app_key={app_key}'
     response = requests.get(search_url)
     search_results = response.json()
  
     recipes = search_results['hits']
+    print(recipes[0])
 
     return recipes
 
@@ -45,24 +40,10 @@ def search(ingredient, add_filters):
 
 def show_results():
     # take data from the form
-    ingredient = request.form.get('ingredient')  # main filter
-    c_type = request.form.get('c_type')  # additional filters
-    m_type = request.form.get('m_type')
-    d_type = request.form.get('d_type')
-
-    # concatenate the additional filters
-    add_filters = ''
-    if c_type != '':
-        add_filters = f'&cuisineType={c_type}'
-    if m_type != '':
-        add_filters += f'&mealType={m_type}'
-    if d_type != '':
-        add_filters += f'&health={d_type}'
-    add_filters = add_filters.replace(' ', '%20')
+    ingredient = "spinach"
 
     # run search()
-    results = search(ingredient, add_filters)
-    global list_of_recipes
+    results = search(ingredient)
     list_of_recipes = []
 
 # collect data from every recipe in search results
@@ -71,8 +52,8 @@ def show_results():
         label = recipe['label']
         url = recipe['url']
         img = recipe['image']
-        servings = recipe['yield']
         shopping_list = recipe['ingredientLines']
+        servings = recipe['yield']
         nutrients = {
             "cal":
                 round(recipe['calories'] / servings),
@@ -126,17 +107,16 @@ def show_results():
 def saveRecipes(list_of_recipes):
     text = ""
     labels = ('label','url','shopping_list')
-    with open("recipes.txt","w+") as all_recipies:
+    with open("shoppinglist.txt","w+") as all_recipies:
         for recipe in list_of_recipes:
             recipe = {key:value for (key,value) in recipe.items() if key in labels}
             string = json.dumps(recipe)
             text += string + "\n"
         all_recipies.write(text)
 
-
 def createShoppingList(*args):
-    m = open("shoppinglist.txt","w+")
-    with open("recipes.txt","r+") as source:
+    m = open("shoppinglist2.txt","w+")
+    with open("shoppinglist.txt","r+") as source:
         all_lines = source.readlines()
         text = ""
         indexes = args[0]
@@ -151,41 +131,36 @@ def createShoppingList(*args):
         m.write(text)
     m.close()
 
+global_var = []
+def index(name):
+    # players = request.form.getlist('check')
+    if 'search-button' == name:
+        global_var = show_results()
+        saveRecipes(global_var)
+        return global_var
+    elif 'save-button' == name:
+        indexes_str = ["2","5","7","12"]
+        indexes_int = [int(x) for x in indexes_str]
+        createShoppingList(indexes_int)
+        # indexes = request.form.getlist('save')
+        # pdf = FPDF()
+        # pdf.add_page()
+        # pdf.set_font("Arial", size = 12)
+        # pdf.cell(200, 10, txt = recipe_show,
+        #          ln = 1, align = 'C')
+        # pdf.output("GFG.pdf")
+        return ("ok")
+#             for x in f:
+# pdf.cell(200, 10, txt = x, ln = 1, align = 'C')
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    if request.method == 'POST':
-        if 'search-button' in request.form:
-            recipe_show = show_results()
-            saveRecipes(recipe_show)
-            return render_template(
-                'index.html',
-                list_of_recipes=recipe_show,
-                cuisine=cuisine_type,
-                diet=diet_type,
-                meal=meal_type,
-                )
-        elif 'save-button' in request.form:
-            indexes_str = request.form.getlist('save')
-            indexes_int = [int(x) for x in indexes_str]
-            createShoppingList(indexes_int)
-            # pdf = FPDF()
-            # pdf.add_page()
-            # pdf.set_font("Arial", size = 12)
-            # pdf.cell(200, 10, txt = recipe_show,
-            #         ln = 1, align = 'C')
-            # pdf.output("GFG.pdf")
-            # return render_template('index.html')
-            path = 'shoppinglist.txt'
-            return send_file(path,download_name='shoppinglist.txt', as_attachment=True)
+        # path = 'samplefile.pdf'
+            # return send_file(path,download_name='shoppinglist.pdf', as_attachment=True)
     else:
-        return render_template(
-            'index.html',
-            cuisine=cuisine_type,
-            diet=diet_type,
-            meal=meal_type,
-        )
+        return ("buuu")
 
+results = index('search-button')
+for i in results:
+    print(i['label'])
 
-if __name__ == '__main__':
-    app.run(debug=True)
+results2 = (index('save-button'))
+# print(results2)
